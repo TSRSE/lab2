@@ -1,64 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace lab2_DB
 {
     class Functions
     {
-        public void ExeptionDefaultPutput(int half, string Exeption)
-        {
-            if(half == 1)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine("\nНажмите любую клавишу для продолжения");
-                Console.ResetColor();
-                Console.ReadKey();
-            }
-            if(half == 2) { 
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(Exeption);
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine("\nНажмите любую клавишу для продолжения");
-                Console.ResetColor();
-                Console.ReadKey();
-            }
-        }
         public bool Editing = false;
         List<Student> TotalList = new List<Student>();
-        public void GotExeption(int WhatIsTheCase, string WhatHappened, string Solution)
+
+        public void ExeptionDefaultOutput(int half, string Event, string Solution)
         {
-            switch (WhatIsTheCase)
+            switch (half)
             {
                 case 1:
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(WhatHappened);
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine(Solution);
+
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("\nНажмите любую клавишу для продолжения или ESC чтобы выйти в главное меню");
                     Console.ResetColor();
-                    Console.WriteLine("\nНажмите любую клавишу, чтобы вернуться в меню");
-                    Console.ReadKey();
-                    MainMenu();
+                    int key = (int)Console.ReadKey().Key;
+                    AutoMainMenu(key);
                     break;
 
                 case 2:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(WhatHappened);
+                    Console.WriteLine(Event);
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("\nНажмите любую клавишу для продолжения или ESC чтобы выйти в главное меню");
+                    Console.ResetColor();
+                    key = (int)Console.ReadKey().Key;
+                    AutoMainMenu(key);
+                    break;
+
+                case 3:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(Event);
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(Solution);
                     Console.ResetColor();
                     Console.WriteLine("\nНажмите любую клавишу, чтобы вернуться в меню");
-                    Console.ReadKey();
-                    break;
-
-                default:
+                    key = (int)Console.ReadKey().Key;
+                    AutoMainMenu(key);
                     break;
             }
-        }
+        } //ExeptionCatcher
         private void InputInStudentEdits(bool OperatingWithNumbers, int _case, List<Student> list, int place, string WhatWeNeedToInput, string ExeptionOutPut)
         {
             WorkWithFileRaw Save = new WorkWithFileRaw();
@@ -72,22 +63,22 @@ namespace lab2_DB
 
                     if (Regex.Match(Input, "[a-zA-Z0-9]").Value.Length > 0 || Input.Length < 2)
                     {
-                        ExeptionDefaultPutput(2, ExeptionOutPut);
+                        ExeptionDefaultOutput(2, ExeptionOutPut,"");
                     }
                     else
                     {
                         switch (_case)
                         {
                             case 1: //Фамилия
-                                list[place - 1].SurName = Input.Substring(0, 1).ToUpper() + Input.Substring(1).ToLower().Replace(" ", "");
+                                list[place - 1].SurName = Input.Substring(0, 1).ToUpper() + Input.Remove(0,1).ToLower().Replace(" ", "");
                                 break;
 
                             case 2: //Имя
-                                list[place - 1].Name = Input.Substring(0, 1).ToUpper() + Input.Substring(1).ToLower().Replace(" ", "");
+                                list[place - 1].Name = Input.Substring(0, 1).ToUpper() + Input.Remove(0, 1).ToLower().Replace(" ", "");
                                 break;
 
                             case 3: //Отчество
-                                list[place - 1].MiddleName = Input.Substring(0, 1).ToUpper() + Input.Substring(1).ToLower().Replace(" ", "");
+                                list[place - 1].MiddleName = Input.Substring(0, 1).ToUpper() + Input.Remove(0, 1).ToLower().Replace(" ", "");
                                 break;
 
                             case 4: //Институт
@@ -99,7 +90,7 @@ namespace lab2_DB
                                 break;
 
                             default:
-                                GotExeption(1, "Не удалось изменить значение", "Обратитесь к разработчику");
+                                ExeptionDefaultOutput(3, "Не удалось изменить значение", "Обратитесь к разработчику");
                                 break;
                         }
 
@@ -121,7 +112,7 @@ namespace lab2_DB
                             bool Approved = int.TryParse(Console.ReadLine(), out _day);
                             if (!Approved || _day < 1 || _day > 31)
                             {
-                                ExeptionDefaultPutput(2, "Такое значение не подходит для дня");
+                                ExeptionDefaultOutput(2, "Такое значение не подходит для дня","");
                             }
                             else
                             {
@@ -139,7 +130,7 @@ namespace lab2_DB
                             bool Approved = int.TryParse(Console.ReadLine(), out _month);
                             if (!Approved || _month < 1 || _month > 12)
                             {
-                                ExeptionDefaultPutput(2, "Такое значение не подходит для месяца");
+                                ExeptionDefaultOutput(2, "Такое значение не подходит для месяца","");
                             }
                             else
                             {
@@ -157,7 +148,7 @@ namespace lab2_DB
                             bool Approved = int.TryParse(Console.ReadLine(), out _year);
                             if (!Approved || _year.ToString().Length != 4)
                             {
-                                ExeptionDefaultPutput(2, "Такое значение не подходит для года");
+                                ExeptionDefaultOutput(2, "Такое значение не подходит для года","");
                             }
                             else
                             {
@@ -178,7 +169,7 @@ namespace lab2_DB
                             bool Approved = int.TryParse(Console.ReadLine(), out int Course);
                             if (!Approved || Course < 1 || Course > 5)
                             {
-                                ExeptionDefaultPutput(2, "Такое значение не соответствует курсу студента");
+                                ExeptionDefaultOutput(2, "Такое значение не соответствует курсу студента","");
                             }
                             else
                             {
@@ -196,7 +187,7 @@ namespace lab2_DB
                             bool Approved = double.TryParse(Console.ReadLine(), out double avgscore);
                             if (!Approved || avgscore < 1 || avgscore > 5)
                             {
-                                ExeptionDefaultPutput(2, "Такое значение не подходит для средней оценки студента");
+                                ExeptionDefaultOutput(2, "Такое значение не подходит для средней оценки студента","");
                             }
                             else
                             {
@@ -207,12 +198,12 @@ namespace lab2_DB
                         break;
 
                     default:
-                        GotExeption(1, "Не удалось изменить значение", "Обратитесь к разработчику");
+                        ExeptionDefaultOutput(3, "Не удалось изменить значение", "Обратитесь к разработчику");
                         break;
                 }
             }
             Save.WriteInFileRaw(list);
-        }
+        } //CommonMethodEdtior
 
         #region VisualMenus
         public void MainMenu()
@@ -230,14 +221,14 @@ namespace lab2_DB
                 Console.WriteLine(((Coice == 1) ? ">> " : " ") + "Операции с базой данных");
 
                 key = (int)Console.ReadKey().Key;
+                
                 if (key == 38) Coice--;
                 if (key == 40) Coice++;
-                if (key == 13 || key == 27) break;
-
+                if (key == 27) Process.GetCurrentProcess().Kill();
                 if (Coice < 0) Coice = 1;
                 if (Coice > 1) Coice = 0;
 
-            } while (key != 27);
+            } while (key != 13);
 
             switch (Coice)
             {
@@ -252,6 +243,11 @@ namespace lab2_DB
                     break;
             }
             Console.ReadKey();
+        }
+        void AutoMainMenu(int ESC)
+        {
+            if (ESC == 27)
+                MainMenu();
         }
 
         //-----------------EDITORMENU-------------------//
@@ -273,14 +269,14 @@ namespace lab2_DB
                 Console.ResetColor();
 
                 key = (int)Console.ReadKey().Key;
+                AutoMainMenu(key);
                 if (key == 38) Coice--;
                 if (key == 40) Coice++;
-                if (key == 13 || key == 27) break;
 
                 if (Coice < 0) Coice = 4;
                 if (Coice > 4) Coice = 0;
 
-            } while (key != 27);
+            } while (key != 13);
 
             switch (Coice)
             {
@@ -327,18 +323,15 @@ namespace lab2_DB
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine(((Choice == 4) ? ">> " : " ") + "Назад");
                 Console.ResetColor();
-
                 key = (int)Console.ReadKey().Key;
+                AutoMainMenu(key);
                 if (key == 38) Choice--;
                 if (key == 40) Choice++;
-                if (key == 13 || key == 27) break;
 
                 if (Choice < 0) Choice = 4;
                 if (Choice > 4) Choice = 0;
 
             } while (key != 13);
-
-            if (key == 27) Choice = 4;
 
             switch (Choice)
             {
@@ -353,7 +346,7 @@ namespace lab2_DB
                     {
                         Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
-                    ExeptionDefaultPutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить");
+                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
                     SortElementsByOrderMenu();
                     break;
 
@@ -369,7 +362,7 @@ namespace lab2_DB
                         Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     TotalList.Clear();
-                    ExeptionDefaultPutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить");
+                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
                     SortElementsByOrderMenu();
                     break;
 
@@ -385,7 +378,7 @@ namespace lab2_DB
                         Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     TotalList.Clear();
-                    ExeptionDefaultPutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить");
+                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
                     SortElementsByOrderMenu();
                     break;
 
@@ -401,7 +394,7 @@ namespace lab2_DB
                         Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     TotalList.Clear();
-                    ExeptionDefaultPutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить");
+                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
                     SortElementsByOrderMenu();
                     break;
 
@@ -425,12 +418,11 @@ namespace lab2_DB
                 Console.Clear();
                 Console.WriteLine("Введите Фамилию студента");
                 SurName = Console.ReadLine();
-
                 if (Regex.Match(SurName, "[a-zA-Z0-9]").Value.Length > 0 || SurName.Length < 2)
-                    ExeptionDefaultPutput(2,"В фамилии первая буква должна быть заглавной, а сама фамилия не должно иметь английских символов или чисел");
+                    ExeptionDefaultOutput(2,"В фамилии первая буква должна быть заглавной, а сама фамилия не должно иметь английских символов или чисел","");
                 else
                 {
-                    SurName = SurName.Substring(0, 1).ToUpper() + SurName.Substring(0).ToLower().Replace(" ", "");
+                    SurName = SurName.Substring(0, 1).ToUpper() + SurName.Remove(0,1).ToLower().Replace(" ", "");
                     break;
                 }
             }
@@ -444,10 +436,10 @@ namespace lab2_DB
 
 
                 if (Regex.Match(Name, "[a-zA-Z0-9]").Value.Length > 0 || Name.Length<2)
-                    ExeptionDefaultPutput(2, "В имени первая буква должна быть заглавной, а само имя не должно иметь английских символов или чисел");
+                    ExeptionDefaultOutput(2, "В имени первая буква должна быть заглавной, а само имя не должно иметь английских символов или чисел","");
                 else
                 {
-                    Name = Name.Substring(0, 1).ToUpper() + Name.Substring(0).ToLower().Replace(" ", "");
+                    Name = Name.Substring(0, 1).ToUpper() + Name.Remove(0, 1).ToLower().Replace(" ", "");
                     break;
                 }
             }
@@ -460,10 +452,10 @@ namespace lab2_DB
                 MiddleName = Console.ReadLine();
 
                 if (Regex.Match(MiddleName, "[a-zA-Z0-9]").Value.Length > 0 || MiddleName.Length<2)
-                    ExeptionDefaultPutput(2,"В отчестве первая буква должна быть заглавной, а само отчество не должно иметь английских символов или чисел");
+                    ExeptionDefaultOutput(2,"В отчестве первая буква должна быть заглавной, а само отчество не должно иметь английских символов или чисел","");
                 else
                 {
-                    MiddleName = MiddleName.Substring(0, 1).ToUpper() + MiddleName.Substring(0).ToLower().Replace(" ", "");
+                    MiddleName = MiddleName.Substring(0, 1).ToUpper() + MiddleName.Remove(0, 1).ToLower().Replace(" ", "");
                     break;
                 }
             }
@@ -477,7 +469,7 @@ namespace lab2_DB
                 Console.WriteLine("Введите сначала День рождения студента");
                 bool Approved = int.TryParse(Console.ReadLine(), out _day);
                 if (!Approved || _day < 1 || _day > 31)
-                    ExeptionDefaultPutput(2, "Такое значение не подходит для дня");
+                    ExeptionDefaultOutput(2, "Такое значение не подходит для дня","");
                 else
                 {
                     if (_day.ToString().Length == 1)
@@ -493,7 +485,7 @@ namespace lab2_DB
                 Console.WriteLine("Введите Месяц рождения студента");
                 bool Approved = int.TryParse(Console.ReadLine(), out _month);
                 if (!Approved || _month < 1 || _month > 12)
-                    ExeptionDefaultPutput(2, "Такое значение не подходит для месяца");
+                    ExeptionDefaultOutput(2, "Такое значение не подходит для месяца","");
                 else
                 {
                     if (_month.ToString().Length == 1)
@@ -509,7 +501,7 @@ namespace lab2_DB
                 Console.WriteLine("Введите Год рождения студента");
                 bool Approved = int.TryParse(Console.ReadLine(), out _year);
                 if (!Approved || _year.ToString().Length != 4)
-                    ExeptionDefaultPutput(2, "Такое значение не подходит для года");
+                    ExeptionDefaultOutput(2, "Такое значение не подходит для года","");
                 else
                 {
                     if (_year.ToString().Length > 2)
@@ -528,7 +520,7 @@ namespace lab2_DB
                 Institute = Console.ReadLine();
                 Institute = Institute.ToUpper();
                 if (Regex.Match(Institute, "[a-zA-Z0-9]").Value.Length > 0)
-                    ExeptionDefaultPutput(2, "В названии института не может быть чисел и английских символов");
+                    ExeptionDefaultOutput(2, "В названии института не может быть чисел и английских символов","");
                 else
                 {
                     Institute.ToUpper();
@@ -544,7 +536,7 @@ namespace lab2_DB
                 Group = Console.ReadLine();
                 Group = Group.ToUpper().Replace(" ","");
                 if (Regex.Match(Group, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Group, "[0-9]").Value.Length < 1  || !Group.Contains('-'))
-                    ExeptionDefaultPutput(2, "В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной");
+                    ExeptionDefaultOutput(2, "В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной","");
                 else
                     break;
             }
@@ -556,7 +548,7 @@ namespace lab2_DB
                 Console.WriteLine("Введите курс студента");
                 bool Approved = int.TryParse(Console.ReadLine(), out Course);
                 if (!Approved || Course < 1 || Course > 5)
-                    ExeptionDefaultPutput(2, "Такое значение не соответствует курсу студента");
+                    ExeptionDefaultOutput(2, "Такое значение не соответствует курсу студента","");
                 else  
                     break;
             }
@@ -568,7 +560,7 @@ namespace lab2_DB
                 Console.WriteLine("Введите ср.знач оценки студента");
                 bool Approved = double.TryParse(Console.ReadLine(), out avgscore);
                 if (!Approved || avgscore < 1 || avgscore > 5)
-                    ExeptionDefaultPutput(2, "Такое значение не подходит для среднего балла студента");
+                    ExeptionDefaultOutput(2, "Такое значение не подходит для среднего балла студента","");
                 else
                     break;
             }
@@ -599,7 +591,7 @@ namespace lab2_DB
                     catch 
                     {
                         Console.Clear();
-                        ExeptionDefaultPutput(2, "Студент не был добавлен!");
+                        ExeptionDefaultOutput(2, "Студент не был добавлен!","");
                     }
                 }
                 if (key == 27 || key == 78)
@@ -627,7 +619,7 @@ namespace lab2_DB
                 bool Approved = int.TryParse(Console.ReadLine(), out PlaceOfStudent);
                 if (!Approved || PlaceOfStudent > TotalList.Count || PlaceOfStudent < 1)
                 {
-                    GotExeption(2, "Номер не может превышать общее кол-во элементов или быть меньше 1", "Введите существующий элемент");
+                    ExeptionDefaultOutput(3, "Номер не может превышать общее кол-во элементов или быть меньше 1", "Введите существующий элемент");
                 }
                 else
                     break;
@@ -645,7 +637,7 @@ namespace lab2_DB
                     "\n6. Группу" +
                     "\n7. Курс" +
                     "\n8. Средний балл" +
-                    "\n9. Отменить редактирование");
+                    "\n9. Назад");
                 bool Approved = int.TryParse(Console.ReadLine(), out _case);
                 if (Approved && _case < 8 && _case > 0)
                 {
@@ -684,12 +676,6 @@ namespace lab2_DB
                             break;
 
                         case 6:
-                            /*
-                                if (Regex.Match(Group, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Group, "[0-9]").Value.Length < 1 || !Group.Contains('-'))
-                                {
-                                    ExeptionDefaultPutput(2,"В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной");
-                                }
-                             */
                             //Группа
                             //Введите группу студента (Пример: БПИ20-9) | В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной
                             InputInStudentEdits(false, 5, TotalList, PlaceOfStudent, "/Введите группу студента (Пример: БПИ20-9)", "В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной");
@@ -734,7 +720,7 @@ namespace lab2_DB
                 bool Approved = int.TryParse(Console.ReadLine(), out PlaceOfStudent);
                 if (!Approved || PlaceOfStudent > TotalList.Count || PlaceOfStudent < 1)
                 {
-                    GotExeption(2, "Номер не может превышать общее кол-во элементов или быть меньше 1", "Введите существующий элемент");
+                    ExeptionDefaultOutput(3, "Номер не может превышать общее кол-во элементов или быть меньше 1", "Введите существующий элемент");
                 }
                 else
                     break;
@@ -785,15 +771,15 @@ namespace lab2_DB
                 Console.ResetColor();
 
                 key = (int)Console.ReadKey().Key;
+                AutoMainMenu(key);
                 if (key == 38) Choice--;
                 if (key == 40) Choice++;
-                if (key == 13 || key == 27) break;
 
-                if (Choice < 0) Choice = 4;
-                if (Choice > 4) Choice = 0;
+                if (Choice < 0) Choice = 5;
+                if (Choice > 5) Choice = 0;
 
             } while (key != 13);
-            if (key == 27) Choice = 4;
+            //if (key == 27) Choice = 4;
             switch (Choice)
             {
                 case 0:
@@ -853,7 +839,7 @@ namespace lab2_DB
                 Console.WriteLine("К сожалению, в Базе данных нет такого студента, в чьем име\\фамилии\\отчестве содержалось бы {0}", Coincidence);
                 Console.ResetColor();
             }
-            ExeptionDefaultPutput(1, "");
+            ExeptionDefaultOutput(1, "", "");
             OutputMenu();
         }
         private void FindByDate()
@@ -882,7 +868,7 @@ namespace lab2_DB
                 Console.WriteLine("К сожалению, в Базе данных нет такого студента, у которого дата рождения {0}", Coincidence);
                 Console.ResetColor();
             }
-            ExeptionDefaultPutput(1, "");
+            ExeptionDefaultOutput(1, "", "");
             OutputMenu();
         }
         private void FindAverage()
@@ -897,7 +883,7 @@ namespace lab2_DB
             }
             AVG = AVG / TotalList.Count();
             Console.WriteLine("Среднее значение равно: {0:C1}", AVG);
-            ExeptionDefaultPutput(1, "");
+            ExeptionDefaultOutput(1, "", "");
             OutputMenu();
         }
         private void FindSummOfAverage()
@@ -913,7 +899,7 @@ namespace lab2_DB
 
             Console.WriteLine("Cумма по полю Средний балл: {0}", SummOfAVG);
 
-            ExeptionDefaultPutput(1, "");
+            ExeptionDefaultOutput(1, "", "");
             OutputMenu();
         }
         private void FindAverageMinMax()
@@ -954,7 +940,7 @@ namespace lab2_DB
                         student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                 }
             }
-            ExeptionDefaultPutput(1, "");
+            ExeptionDefaultOutput(1, "", "");
             OutputMenu();
         }
         //----------------------------------------------//
