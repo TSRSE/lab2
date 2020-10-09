@@ -779,8 +779,9 @@ namespace lab2_DB
                 Console.WriteLine(((Choice == 1) ? ">> " : " ") + "Найти студента по ДАТЕ РОЖДЕНИЯ");
                 Console.WriteLine(((Choice == 2) ? ">> " : " ") + "Найти среднее значение и сумму по полю СРЕДНИЙ БАЛЛ");
                 Console.WriteLine(((Choice == 3) ? ">> " : " ") + "Найти Максимальное и Минимальное значение СРЕДНЕГО БАЛЛА");
+                Console.WriteLine(((Choice == 4) ? ">> " : " ") + "Найти Максимальное и Минимальное значение СРЕДНЕГО БАЛЛА");
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(((Choice == 4) ? ">> " : " ") + "Назад");
+                Console.WriteLine(((Choice == 5) ? ">> " : " ") + "Назад");
                 Console.ResetColor();
 
                 key = (int)Console.ReadKey().Key;
@@ -816,6 +817,11 @@ namespace lab2_DB
                     break;
 
                 case 4:
+                    Console.Clear();
+                    FindSummOfAverage();
+                    break;
+
+                case 5:
                     Console.Clear();
                     MainMenu();
                     break;
@@ -891,6 +897,22 @@ namespace lab2_DB
             }
             AVG = AVG / TotalList.Count();
             Console.WriteLine("Среднее значение равно: {0:C1}", AVG);
+            ExeptionDefaultPutput(1, "");
+            OutputMenu();
+        }
+        private void FindSummOfAverage()
+        {
+            ReadListFile(false);
+            double SummOfAVG = 0;
+            Console.Title = "Поиск суммы элементов по полю Средний балл";
+            Console.WriteLine("Ищем сумму по полю Средний балл\n");
+            foreach (Student student in TotalList)
+            {
+                SummOfAVG += student.AverageScore;
+            }
+
+            Console.WriteLine("Cумма по полю Средний балл: {0}", SummOfAVG);
+
             ExeptionDefaultPutput(1, "");
             OutputMenu();
         }
