@@ -11,7 +11,7 @@ namespace lab2_DB
     class WorkWithFileRaw
     {
         Functions function = new Functions();
-        public void ReadFromFileRaw(List<Student> list, bool IsEditing)
+        public void ReadFromFileRaw(List<Student> list, bool IsAdding)
         {
             list.Clear();
             int CurrenLineNum = 0;
@@ -20,6 +20,11 @@ namespace lab2_DB
             double avgscore;
             string defaultpath = @"DataBase\StudentsBD.txt";
             string[] ReadenLines = File.ReadAllLines(defaultpath);
+
+            if (ReadenLines.Length == 0 && !IsAdding)
+            {
+                function.GotExeption(1, "В файле не было найдено ни единого элемента","Введите элементы");
+            }
 
             //Добавляем из прочитанного файла Студентов в главный общий лист
             try
@@ -31,33 +36,33 @@ namespace lab2_DB
                     string[] words = CurrentLine.Split(' ');
 
                     bool Approved = int.TryParse(words[0], out Place);
-                    if (!Approved && IsEditing == false)
+                    if (!Approved)
                         function.GotExeption(1, $"В графе Номер {words[0]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
 
                     SurName = words[1];
                     Name = words[2];
                     MiddleName = words[3];
-                    if (Regex.Match(SurName+Name+MiddleName, "[a-zA-Z]").Value.Length > 0 && IsEditing == false)
+                    if (Regex.Match(SurName+Name+MiddleName, "[a-zA-Z]").Value.Length > 0 && IsAdding == false)
                         function.GotExeption(1, $"В графе ФИО {SurName+" "+Name+" "+MiddleName} на строке {CurrenLineNum + 1} допущена ошибка. ","\nУберите лишние буквы");
 
                     BDDate = words[4];
-                    if (Regex.Match(BDDate, "[а-яА-ЯёЁa-zA-Z]").Value.Length > 0 && IsEditing == false)
+                    if (Regex.Match(BDDate, "[а-яА-ЯёЁa-zA-Z]").Value.Length > 0 && IsAdding == false)
                         function.GotExeption(1, $"В графе Дата {words[4]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите лишние буквы");
 
                     Institute = words[5];
-                    if (Regex.Match(Institute, "[a-zA-Z0-9]").Value.Length > 0 && IsEditing == false)
+                    if (Regex.Match(Institute, "[a-zA-Z0-9]").Value.Length > 0 && IsAdding == false)
                         function.GotExeption(1, $"В графе Институт {words[5]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите лишние буквы");
 
                     Group = words[6];
-                    if (!Group.Contains('-') || Group.Contains(' ') || Regex.Match(Group, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Group, "[0-9]").Value.Length < 0 && IsEditing == false)
+                    if (!Group.Contains('-') || Group.Contains(' ') || Regex.Match(Group, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Group, "[0-9]").Value.Length < 0 && IsAdding == false)
                         function.GotExeption(1, $"В графе Группа {words[6]} на строке {CurrenLineNum + 1} допущена ошибка. ", "Посмотрите шаблон, название группы должно быть слитно с числами\nПример: БПИ20-9");
 
                     Approved = int.TryParse(words[7], out Course);
-                    if (!Approved||Course<1 || Course>5 && IsEditing == false)
+                    if (!Approved||Course<1 || Course>5 && IsAdding == false)
                         function.GotExeption(1, $"В графе Курс {words[7]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
 
                     Approved = double.TryParse(words[8], out avgscore);
-                    if (!Approved || avgscore < 0 || avgscore > 5 && IsEditing == false)
+                    if (!Approved || avgscore < 0 || avgscore > 5 && IsAdding == false)
                         function.GotExeption(1, $"В графе Средний балл {words[8]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
 
                     list.Add(new Student(Place, SurName, Name, MiddleName, BDDate, Institute, Group, Course, avgscore));

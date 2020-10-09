@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace lab2_DB
+﻿namespace lab2_DB
 {
     /*
-1 Саяпов Олег Евгениевич 13.10.02 ИТАСУ БПИ20-9 1 4
-2 Иванов Иван Иванович 01.07.03 ИТАСУ БПИ20-9 1 4,2
-3 Алексей Истомин Иванович 02.08.01 ИТАСУ БПИ20-9 1 4,2
+        1 Саяпов Олег Евгениевич 13.10.02 ИТАСУ БПИ20-9 1 4
+        2 Иванов Иван Иванович 01.07.03 ИТАСУ БПИ20-9 1 4,2
+        3 Алексей Истомин Иванович 02.08.01 ИТАСУ БПИ20-9 1 4,2
      */
     // 1 Иванов Иван Иванович **.**.** [Институт] [группа] [Курс] *,*
     class Student
@@ -30,11 +23,11 @@ namespace lab2_DB
             PlaceInList = _placeinlist;
             SurName = _surname;
             Name = _name;
-            MiddleName=_middlename;
-            BirthDayDate=_birthdate;
-            Institute=_institute;
-            Group=_group;
-            Cource=_cource;
+            MiddleName = _middlename;
+            BirthDayDate = _birthdate;
+            Institute = _institute;
+            Group = _group;
+            Cource = _cource;
             AverageScore = _avgscore;
         }
     }
