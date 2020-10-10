@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 
 namespace lab2_DB
@@ -46,8 +43,8 @@ namespace lab2_DB
                         function.ExeptionDefaultOutput(3, $"В графе ФИО {SurName+" "+Name+" "+MiddleName} на строке {CurrenLineNum + 1} допущена ошибка. ","\nУберите лишние буквы");
 
                     BDDate = words[4];
-                    if (Regex.Match(BDDate, "[а-яА-ЯёЁa-zA-Z]").Value.Length > 0 && IsAdding == false)
-                        function.ExeptionDefaultOutput(3, $"В графе Дата {words[4]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите лишние буквы");
+                    if (Regex.Match(BDDate, "[а-яА-ЯёЁa-zA-Z]").Value.Length > 0 && IsAdding == false || BDDate.Remove(0,6).Length != 2) // 01.01.01
+                        function.ExeptionDefaultOutput(3, $"В графе Дата {words[4]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите лишние буквы и цифры");
 
                     Institute = words[5].ToUpper();
                     if (Regex.Match(Institute, "[a-zA-Z0-9]").Value.Length > 0 && IsAdding == false)

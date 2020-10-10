@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace lab2_DB
 {
@@ -466,7 +463,7 @@ namespace lab2_DB
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Введите сначала День рождения студента");
+                Console.WriteLine("Введите сначала День рождения студента, только день, не всю дату");
                 bool Approved = int.TryParse(Console.ReadLine(), out _day);
                 if (!Approved || _day < 1 || _day > 31)
                     ExeptionDefaultOutput(2, "Такое значение не подходит для дня","");
@@ -500,7 +497,7 @@ namespace lab2_DB
                 Console.Clear();
                 Console.WriteLine("Введите Год рождения студента");
                 bool Approved = int.TryParse(Console.ReadLine(), out _year);
-                if (!Approved || _year.ToString().Length != 4)
+                if (!Approved || _year.ToString().Length != 4 || _year<1988 || _year > 2005)
                     ExeptionDefaultOutput(2, "Такое значение не подходит для года","");
                 else
                 {
