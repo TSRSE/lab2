@@ -8,7 +8,7 @@ namespace lab2_DB
 {
     class Functions
     {
-        public bool Editing = false;
+        private bool Editing = false;
         List<Student> TotalList = new List<Student>();
 
         public void ExeptionDefaultOutput(int _case, string Event, string Solution)
@@ -47,7 +47,7 @@ namespace lab2_DB
                     break;
             }
         } //ExeptionCatcher
-        private void InputInStudentEdits(bool OperatingWithNumbers, int _case, List<Student> list, int place, string WhatWeNeedToInput, string ExeptionOutPut)
+        private void InputInStudentEdits(bool OperatingWithNumbers, int _case, List<Student> list, int place, string WhatWeNeedToInput, string ExeptionOutPut, string Display)
         {
             WorkWithFileRaw Save = new WorkWithFileRaw();
             if (!OperatingWithNumbers)
@@ -55,6 +55,7 @@ namespace lab2_DB
                 while (true)
                 {
                     Console.Clear();
+                    Console.WriteLine("Нынешнее состояние: {0}\n", Display);
                     Console.WriteLine(WhatWeNeedToInput);
                     string Input = Console.ReadLine();
 
@@ -204,7 +205,7 @@ namespace lab2_DB
                 }
             }
             Save.WriteInFileRaw(list);
-        } //CommonMethodEdtior
+        } //Метод для меню изменений
 
         #region VisualMenus
         public void MainMenu()
@@ -605,7 +606,6 @@ namespace lab2_DB
         private void EditElement()
         {
             ReadListFile(false);
-            int _case;
             bool Editing = true;
             Console.Title = "Редактор изменений информации о студентах";
             int PlaceOfStudent=0;
@@ -625,81 +625,96 @@ namespace lab2_DB
                 else
                     break;
             }
+            
             while (Editing)
             {
+                int Choice = 1, key;
                 WorkWithFileRaw Save = new WorkWithFileRaw();
-                Console.Clear();
-                Console.WriteLine("Что вы хотите изменить у {0} {1} {2} \t| {3} | {4} {5} | Курс:{6} | Средний балл: {7} ?", TotalList[PlaceOfStudent-1].SurName, TotalList[PlaceOfStudent - 1].Name, TotalList[PlaceOfStudent - 1].MiddleName, TotalList[PlaceOfStudent - 1].BirthDayDate, TotalList[PlaceOfStudent - 1].Institute, TotalList[PlaceOfStudent - 1].Group, TotalList[PlaceOfStudent - 1].Cource, TotalList[PlaceOfStudent - 1].AverageScore);
-                Console.WriteLine("1. Фамилия" +
-                    "\n2. Имя" +
-                    "\n3. Отчество" +
-                    "\n4. День рождения" +
-                    "\n5. Название института" +
-                    "\n6. Группу" +
-                    "\n7. Курс" +
-                    "\n8. Средний балл" +
-                    "\n9. Назад");
-                bool Approved = int.TryParse(Console.ReadLine(), out _case);
-                if (Approved && _case < 8 && _case > 0)
+                do
                 {
-                    switch (_case)
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("Редактор информации о студенте");
+                    Console.ResetColor();
+                    Console.WriteLine("Что вы хотите изменить у студента\n\n{0} {1} {2} | {3} | {4} {5} | Курс:{6} | Средний балл: {7}\n", TotalList[PlaceOfStudent - 1].SurName, TotalList[PlaceOfStudent - 1].Name, TotalList[PlaceOfStudent - 1].MiddleName, TotalList[PlaceOfStudent - 1].BirthDayDate, TotalList[PlaceOfStudent - 1].Institute, TotalList[PlaceOfStudent - 1].Group, TotalList[PlaceOfStudent - 1].Cource, TotalList[PlaceOfStudent - 1].AverageScore);
+                    Console.WriteLine(((Choice == 1) ? ">> " : " ") + "Фамилия");
+                    Console.WriteLine(((Choice == 2) ? ">> " : " ") + "Имя");
+                    Console.WriteLine(((Choice == 3) ? ">> " : " ") + "Отчество");
+                    Console.WriteLine(((Choice == 4) ? ">> " : " ") + "День рождения");
+                    Console.WriteLine(((Choice == 5) ? ">> " : " ") + "Название института");
+                    Console.WriteLine(((Choice == 6) ? ">> " : " ") + "Группу");
+                    Console.WriteLine(((Choice == 7) ? ">> " : " ") + "Курс");
+                    Console.WriteLine(((Choice == 8) ? ">> " : " ") + "Средний балл");
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine(((Choice == 9) ? ">> " : " ") + "Назад");
+                    Console.ResetColor();
+
+                    key = (int)Console.ReadKey().Key;
+                
+                    if (key == 38) Choice--;
+                    if (key == 40) Choice++;
+                    if (key == 27) Process.GetCurrentProcess().Kill();
+                    if (Choice < 1) Choice = 9;
+                    if (Choice > 9) Choice = 1;
+
+                } while (key != 13);
+
+                    switch (Choice)
                     {
                         case 1:
 
                             // Фамилия
                             //Введите Фамилию студента | 2,"В фамилии первая буква должна быть заглавной, а сама фамилия не должно иметь английских символов или чисел"
-                            InputInStudentEdits(false, 1, TotalList, PlaceOfStudent, "Введите Фамилию студента", "В фамилии первая буква должна быть заглавной, а сама фамилия не должно иметь английских символов или чисел");
+                            InputInStudentEdits(false, 1, TotalList, PlaceOfStudent, "Введите Фамилию студента", "В фамилии первая буква должна быть заглавной, а сама фамилия не должно иметь английских символов или чисел", TotalList[PlaceOfStudent - 1].SurName);
                             break;
 
                         case 2:
 
                             // Имя
                             // Введите Имя студента | В имени первая буква должна быть заглавной, а само имя не должно иметь английских символов или чисел
-                            InputInStudentEdits(false, 2, TotalList, PlaceOfStudent, "Введите Имя студента", "В имени первая буква должна быть заглавной, а само имя не должно иметь английских символов или чисел");
+                            InputInStudentEdits(false, 2, TotalList, PlaceOfStudent, "Введите Имя студента", "В имени первая буква должна быть заглавной, а само имя не должно иметь английских символов или чисел", TotalList[PlaceOfStudent - 1].Name);
                             break;
 
                         case 3:
 
                             // Отчество
                             // Введите Отчество студента | В отчестве первая буква должна быть заглавной, а само отчество не должно иметь английских символов или чисел
-                            InputInStudentEdits(false, 3, TotalList, PlaceOfStudent, "Введите Отчество студента", "В отчестве первая буква должна быть заглавной, а само отчество не должно иметь английских символов или чисел");
+                            InputInStudentEdits(false, 3, TotalList, PlaceOfStudent, "Введите Отчество студента", "В отчестве первая буква должна быть заглавной, а само отчество не должно иметь английских символов или чисел", TotalList[PlaceOfStudent - 1].MiddleName);
                             break;
 
                         case 4:
-                            InputInStudentEdits(true, 1, TotalList, PlaceOfStudent, "", "");
+                            InputInStudentEdits(true, 1, TotalList, PlaceOfStudent, "", "", TotalList[PlaceOfStudent - 1].BirthDayDate);
                             break;
 
                         case 5:
 
                             // Название института
                             // Введите Институт студента | В названии института не может быть чисел и английских символов
-                            InputInStudentEdits(false, 4, TotalList, PlaceOfStudent, "Введите Институт студента", "В названии института не может быть чисел и английских символов");
+                            InputInStudentEdits(false, 4, TotalList, PlaceOfStudent, "Введите Институт студента", "В названии института не может быть чисел и английских символов", TotalList[PlaceOfStudent - 1].Institute);
                             break;
 
                         case 6:
                             //Группа
                             //Введите группу студента (Пример: БПИ20-9) | В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной
-                            InputInStudentEdits(false, 5, TotalList, PlaceOfStudent, "/Введите группу студента (Пример: БПИ20-9)", "В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной");
+                            InputInStudentEdits(false, 5, TotalList, PlaceOfStudent, "/Введите группу студента (Пример: БПИ20-9)", "В названии группы не может английских символов, пробелов, а также нужна '-', но не более одной", TotalList[PlaceOfStudent - 1].Group);
                             break;
 
                         case 7:
 
                             //Курс
-                            InputInStudentEdits(true, 2, TotalList, PlaceOfStudent, "", "");
+                            InputInStudentEdits(true, 2, TotalList, PlaceOfStudent, "", "", TotalList[PlaceOfStudent - 1].Cource.ToString());
                             break;
 
                         case 8:
 
                             //Ср.знач
-                            InputInStudentEdits(true, 3, TotalList, PlaceOfStudent, "", "");
+                            InputInStudentEdits(true, 3, TotalList, PlaceOfStudent, "", "", TotalList[PlaceOfStudent - 1].AverageScore.ToString());
                             break;
-                    }
-                }
-                else if (_case == 9)
-                {
-                    Console.Clear();
-                    Editing = false;
-                    EditElement();
+                        case 9:
+                            Console.Clear();
+                            Editing = false;
+                            EditElement();
+                            break;
                 }
 
             }
@@ -781,7 +796,6 @@ namespace lab2_DB
                 if (Choice > 6) Choice = 0;
 
             } while (key != 13);
-            //if (key == 27) Choice = 4;
             switch (Choice)
             {
                 case 0:
@@ -968,7 +982,7 @@ namespace lab2_DB
         } //Поиск среднего балла, макс и мин у студентов
         //----------------------------------------------//
         #endregion
-        private void ReadListFile(bool IsEditing)
+        private void ReadListFile(bool IsEditing) //Заново читаем из файла, создан для обновления инфы для каждого другого метода
         {
             WorkWithFileRaw WWFR = new WorkWithFileRaw();
             WWFR.ReadFromFileRaw(TotalList, IsEditing);//Добавить всех студентов в список студентов
