@@ -11,9 +11,9 @@ namespace lab2_DB
         public bool Editing = false;
         List<Student> TotalList = new List<Student>();
 
-        public void ExeptionDefaultOutput(int half, string Event, string Solution)
+        public void ExeptionDefaultOutput(int _case, string Event, string Solution)
         {
-            switch (half)
+            switch (_case)
             {
                 case 1:
 
@@ -58,9 +58,13 @@ namespace lab2_DB
                     Console.WriteLine(WhatWeNeedToInput);
                     string Input = Console.ReadLine();
 
-                    if (Regex.Match(Input, "[a-zA-Z0-9]").Value.Length > 0 || Input.Length < 2)
+                    if (_case!=5 && Regex.Match(Input, "[a-zA-Z0-9]").Value.Length > 0 || Input.Length < 2)
                     {
                         ExeptionDefaultOutput(2, ExeptionOutPut,"");
+                    }
+                    else if (_case == 5 && (!Input.Contains('-') || Input.IndexOf('-') != Input.LastIndexOf('-') || Input.Contains(' ') || Regex.Match(Input, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Input, "[0-9]").Value.Length < 0))
+                    {
+                        ExeptionDefaultOutput(2, ExeptionOutPut, "");
                     }
                     else
                     {
@@ -83,7 +87,7 @@ namespace lab2_DB
                                 break;
 
                             case 5: //Группа
-                                TotalList[place - 1].Group = Input;
+                                TotalList[place - 1].Group = Input.ToUpper();
                                 break;
 
                             default:
@@ -214,8 +218,8 @@ namespace lab2_DB
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("Главное меню");
                 Console.ResetColor();
-                Console.WriteLine(((Coice == 0) ? ">> " : " ") + "Вывести базу данных и посмотреть доп. информацию");
-                Console.WriteLine(((Coice == 1) ? ">> " : " ") + "Операции с базой данных");
+                Console.WriteLine(((Coice == 0) ? ">> " : " ") + "Вывести или найти доп. информацию по базе данных");
+                Console.WriteLine(((Coice == 1) ? ">> " : " ") + "Выполнить операции с базой данных");
 
                 key = (int)Console.ReadKey().Key;
                 
@@ -241,14 +245,14 @@ namespace lab2_DB
             }
             Console.ReadKey();
         }
-        void AutoMainMenu(int ESC)
+        private void AutoMainMenu(int ESC)
         {
             if (ESC == 27)
                 MainMenu();
-        }
+        } //Метод выхода в MMenu
 
         //-----------------EDITORMENU-------------------//
-        private void EditorMenu()
+        private void EditorMenu() 
         {
             Console.Title = "Редактор";
             int Coice = 0, key;
@@ -301,7 +305,7 @@ namespace lab2_DB
                     MainMenu();
                     break;
             }
-        }
+        }  //Общее меню для редактора
         private void SortElementsByOrderMenu()
         {
             ReadListFile(false);
@@ -341,7 +345,7 @@ namespace lab2_DB
 
                     foreach (Student student in q1)
                     {
-                        Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+                        Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} \t| Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
                     SortElementsByOrderMenu();
@@ -356,7 +360,7 @@ namespace lab2_DB
 
                     foreach (Student student in Dq1)
                     {
-                        Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+                        Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} \t| Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     TotalList.Clear();
                     ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
@@ -372,7 +376,7 @@ namespace lab2_DB
 
                     foreach (Student student in q2)
                     {
-                        Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+                        Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} \t| Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     TotalList.Clear();
                     ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
@@ -388,7 +392,7 @@ namespace lab2_DB
 
                     foreach (Student student in Dq2)
                     {
-                        Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+                        Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} \t| Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     TotalList.Clear();
                     ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
@@ -400,7 +404,7 @@ namespace lab2_DB
                     EditorMenu();
                     break;
             }
-        }
+        } //Меню сортировки
         private void AddElement()
         {
             ReadListFile(true);
@@ -566,7 +570,7 @@ namespace lab2_DB
             while (true) {
                 Console.Clear();
                 Console.WriteLine("Вы хотите добавить студента: ");
-                Console.Write("{0} {1} {2} | {3} | {4} {5} | Курс:{6} | Средний балл: {7:C1} ? \nY - Сохранить, n - отменить добавление", SurName, Name, MiddleName, BDDate, Institute, Group, Course, avgscore);
+                Console.Write("{0} {1} {2} \t| {3} | {4} {5} | Курс:{6} | Средний балл: {7:C1} ? \nY - Сохранить, n - отменить добавление", SurName, Name, MiddleName, BDDate, Institute, Group, Course, avgscore);
                 int key = (int)Console.ReadKey().Key;
                 if (key == 89)
                 {
@@ -597,7 +601,7 @@ namespace lab2_DB
                     EditorMenu();
                 }
             }
-        }
+        } //Меню создания нового студента
         private void EditElement()
         {
             ReadListFile(false);
@@ -610,7 +614,7 @@ namespace lab2_DB
                 Console.Clear();
                 foreach (Student student in TotalList)
                 {
-                    Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+                    Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                 }
                 Console.Write("Выберите, какому студенту по номеру следует изменить информацию: ");
                 bool Approved = int.TryParse(Console.ReadLine(), out PlaceOfStudent);
@@ -625,7 +629,7 @@ namespace lab2_DB
             {
                 WorkWithFileRaw Save = new WorkWithFileRaw();
                 Console.Clear();
-                Console.WriteLine("Что вы хотите изменить у {0} {1} {2} | {3} | {4} {5} | Курс:{6} | Средний балл: {7} ?", TotalList[PlaceOfStudent-1].SurName, TotalList[PlaceOfStudent - 1].Name, TotalList[PlaceOfStudent - 1].MiddleName, TotalList[PlaceOfStudent - 1].BirthDayDate, TotalList[PlaceOfStudent - 1].Institute, TotalList[PlaceOfStudent - 1].Group, TotalList[PlaceOfStudent - 1].Cource, TotalList[PlaceOfStudent - 1].AverageScore);
+                Console.WriteLine("Что вы хотите изменить у {0} {1} {2} \t| {3} | {4} {5} | Курс:{6} | Средний балл: {7} ?", TotalList[PlaceOfStudent-1].SurName, TotalList[PlaceOfStudent - 1].Name, TotalList[PlaceOfStudent - 1].MiddleName, TotalList[PlaceOfStudent - 1].BirthDayDate, TotalList[PlaceOfStudent - 1].Institute, TotalList[PlaceOfStudent - 1].Group, TotalList[PlaceOfStudent - 1].Cource, TotalList[PlaceOfStudent - 1].AverageScore);
                 Console.WriteLine("1. Фамилия" +
                     "\n2. Имя" +
                     "\n3. Отчество" +
@@ -699,7 +703,7 @@ namespace lab2_DB
                 }
 
             }
-        }
+        } //Редактирование информации о студенте
         private void DeleteElement()
         {
             ReadListFile(false);
@@ -711,7 +715,7 @@ namespace lab2_DB
                 Console.Clear();
                 foreach (Student student in TotalList)
                 {
-                    Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+                    Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} | Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                 }
                 Console.Write("Выберите, какого студента нужнор удалить из базы данных ");
                 bool Approved = int.TryParse(Console.ReadLine(), out PlaceOfStudent);
@@ -723,7 +727,7 @@ namespace lab2_DB
                     break;
             }
             Console.Clear();
-            Console.Write("{0} {1} {2} | {3} | {4} {5} | Курс:{6} | Средний балл: {7:C1} ? \nY - Удалить, n - Отменить", TotalList[PlaceOfStudent-1].SurName, TotalList[PlaceOfStudent-1].Name, TotalList[PlaceOfStudent - 1].MiddleName, TotalList[PlaceOfStudent - 1].BirthDayDate, TotalList[PlaceOfStudent - 1].Institute, TotalList[PlaceOfStudent - 1].Group, TotalList[PlaceOfStudent - 1].Cource, TotalList[PlaceOfStudent - 1].AverageScore);
+            Console.Write("{0} {1} {2} \t| {3} | {4} {5} | Курс:{6} | Средний балл: {7:C1} ? \nY - Удалить, n - Отмена", TotalList[PlaceOfStudent-1].SurName, TotalList[PlaceOfStudent-1].Name, TotalList[PlaceOfStudent - 1].MiddleName, TotalList[PlaceOfStudent - 1].BirthDayDate, TotalList[PlaceOfStudent - 1].Institute, TotalList[PlaceOfStudent - 1].Group, TotalList[PlaceOfStudent - 1].Cource, TotalList[PlaceOfStudent - 1].AverageScore);
             int key = (int)Console.ReadKey().Key;
             if (key == 89)
             {
@@ -743,10 +747,10 @@ namespace lab2_DB
                 DeleteElement();
             if (key == 27)
                 EditorMenu();
-        }
+        } //Удалить информацию о студенте
         //----------------------------------------------//
 
-        //-----------------OUTPUTMENU-------------------//
+        //-----------------OUTPUTMENU-------------------//        
         private void OutputMenu()
         {
             Console.Title = "Меню вывода элементов";
@@ -758,13 +762,14 @@ namespace lab2_DB
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("Меню вывода и поиска");
                 Console.ResetColor();
-                Console.WriteLine(((Choice == 0) ? ">> " : " ") + "Найти студента по ФИО");
-                Console.WriteLine(((Choice == 1) ? ">> " : " ") + "Найти студента по ДАТЕ РОЖДЕНИЯ");
-                Console.WriteLine(((Choice == 2) ? ">> " : " ") + "Найти среднее значение и сумму по полю СРЕДНИЙ БАЛЛ");
-                Console.WriteLine(((Choice == 3) ? ">> " : " ") + "Найти Максимальное и Минимальное значение СРЕДНЕГО БАЛЛА");
+                Console.WriteLine(((Choice == 0) ? ">> " : " ") + "Вывести базу данных");
+                Console.WriteLine(((Choice == 1) ? ">> " : " ") + "Найти студента по ФИО");
+                Console.WriteLine(((Choice == 2) ? ">> " : " ") + "Найти студента по ДАТЕ РОЖДЕНИЯ");
+                Console.WriteLine(((Choice == 3) ? ">> " : " ") + "Найти среднее значение и сумму по полю СРЕДНИЙ БАЛЛ");
                 Console.WriteLine(((Choice == 4) ? ">> " : " ") + "Найти Максимальное и Минимальное значение СРЕДНЕГО БАЛЛА");
+                Console.WriteLine(((Choice == 5) ? ">> " : " ") + "Найти Максимальное и Минимальное значение СРЕДНЕГО БАЛЛА");
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(((Choice == 5) ? ">> " : " ") + "Назад");
+                Console.WriteLine(((Choice == 6) ? ">> " : " ") + "Назад");
                 Console.ResetColor();
 
                 key = (int)Console.ReadKey().Key;
@@ -772,8 +777,8 @@ namespace lab2_DB
                 if (key == 38) Choice--;
                 if (key == 40) Choice++;
 
-                if (Choice < 0) Choice = 5;
-                if (Choice > 5) Choice = 0;
+                if (Choice < 0) Choice = 6;
+                if (Choice > 6) Choice = 0;
 
             } while (key != 13);
             //if (key == 27) Choice = 4;
@@ -781,35 +786,56 @@ namespace lab2_DB
             {
                 case 0:
                     Console.Clear();
-                    FindByName();
+                    OutputAllStudents();
                     break;
 
                 case 1:
                     Console.Clear();
-                    FindByDate();
+                    FindByName();
                     break;
 
                 case 2:
                     Console.Clear();
-                    FindAverage();
+                    FindByDate();
                     break;
 
                 case 3:
                     Console.Clear();
-                    FindAverageMinMax();
+                    FindAverage();
                     break;
 
                 case 4:
                     Console.Clear();
-                    FindSummOfAverage();
+                    FindAverageMinMax();
                     break;
 
                 case 5:
                     Console.Clear();
+                    FindSummOfAverage();
+                    break;
+
+                case 6:
+                    Console.Clear();
                     MainMenu();
                     break;
             }
-        }
+        } //Общее меню для вывода
+        private void OutputAllStudents()
+        {
+            ReadListFile(false);
+            if(TotalList.Count == 0)
+            {
+                ExeptionDefaultOutput(2,"В базе нет студентов","");
+            }
+                
+            foreach (Student student in TotalList)
+            {
+                    Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6}\t| Курс:{7} | Средний балл: {8}",
+                        student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+            }
+            ExeptionDefaultOutput(1, "", "");
+            OutputMenu();
+        } //Вывод всей БД
         private void FindByName()
         {
             Console.Title = "Поиск совпадений по ФИО";
@@ -825,7 +851,7 @@ namespace lab2_DB
                 if((student.SurName + student.Name + student.MiddleName).ToUpper().Contains(Coincidence.ToUpper())) 
                 {
                     HaveCoincidence = true;
-                    Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}", 
+                    Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} | Курс:{7} | Средний балл: {8}", 
                         student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                 }
             }
@@ -838,7 +864,7 @@ namespace lab2_DB
             }
             ExeptionDefaultOutput(1, "", "");
             OutputMenu();
-        }
+        }  //Поиск по имени
         private void FindByDate()
         {
             Console.Title = "Поиск совпадений по Дате рождения";
@@ -853,7 +879,7 @@ namespace lab2_DB
             {
                 if (student.BirthDayDate.Contains(Coincidence))
                 {
-                    Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}",
+                    Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} | Курс:{7} | Средний балл: {8}",
                         student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     HaveCoincidence = true;
                 }
@@ -867,7 +893,7 @@ namespace lab2_DB
             }
             ExeptionDefaultOutput(1, "", "");
             OutputMenu();
-        }
+        }  //Поиск по дате
         private void FindAverage()
         {
             ReadListFile(false);
@@ -882,7 +908,7 @@ namespace lab2_DB
             Console.WriteLine("Среднее значение равно: {0:C1}", AVG);
             ExeptionDefaultOutput(1, "", "");
             OutputMenu();
-        }
+        }  //Поиск среднего по Среднему баллу
         private void FindSummOfAverage()
         {
             ReadListFile(false);
@@ -898,7 +924,7 @@ namespace lab2_DB
 
             ExeptionDefaultOutput(1, "", "");
             OutputMenu();
-        }
+        } //Поиск среднего по Среднему баллу
         private void FindAverageMinMax()
         {
             ReadListFile(false);
@@ -921,7 +947,7 @@ namespace lab2_DB
             {
                 if (student.AverageScore == min)
                 {
-                    Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}",
+                    Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} | Курс:{7} | Средний балл: {8}",
                         student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                 }
             }
@@ -933,16 +959,16 @@ namespace lab2_DB
             {
                 if (student.AverageScore == max)
                 {
-                    Console.WriteLine("№{0}| {1} {2} {3} | {4} | {5} {6} | Курс:{7} | Средний балл: {8}",
+                    Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} | Курс:{7} | Средний балл: {8}",
                         student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                 }
             }
             ExeptionDefaultOutput(1, "", "");
             OutputMenu();
-        }
+        } //Поиск среднего балла, макс и мин у студентов
         //----------------------------------------------//
         #endregion
-        public void ReadListFile(bool IsEditing)
+        private void ReadListFile(bool IsEditing)
         {
             WorkWithFileRaw WWFR = new WorkWithFileRaw();
             WWFR.ReadFromFileRaw(TotalList, IsEditing);//Добавить всех студентов в список студентов

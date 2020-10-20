@@ -36,28 +36,34 @@ namespace lab2_DB
                     if (!Approved)
                         function.ExeptionDefaultOutput(3, $"В графе Номер {words[0]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
 
+                    // Имя + Фамилия + Отчество из файла
                     SurName = words[1];
                     Name = words[2];
                     MiddleName = words[3];
                     if (Regex.Match(SurName+Name+MiddleName, "[a-zA-Z]").Value.Length > 0 && IsAdding == false)
                         function.ExeptionDefaultOutput(3, $"В графе ФИО {SurName+" "+Name+" "+MiddleName} на строке {CurrenLineNum + 1} допущена ошибка. ","\nУберите лишние буквы");
 
+                    // Дата рождения из файла
                     BDDate = words[4];
                     if (Regex.Match(BDDate, "[а-яА-ЯёЁa-zA-Z]").Value.Length > 0 && IsAdding == false || BDDate.Remove(0,6).Length != 2) // 01.01.01
                         function.ExeptionDefaultOutput(3, $"В графе Дата {words[4]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите лишние буквы и цифры");
 
+                    // Институт из файла
                     Institute = words[5].ToUpper();
                     if (Regex.Match(Institute, "[a-zA-Z0-9]").Value.Length > 0 && IsAdding == false)
                         function.ExeptionDefaultOutput(3, $"В графе Институт {words[5]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите лишние буквы");
 
+                    // Группа из файла
                     Group = words[6].ToUpper();
-                    if (!Group.Contains('-') || Group.Contains(' ') || Regex.Match(Group, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Group, "[0-9]").Value.Length < 0 && IsAdding == false)
+                    if (!Group.Contains('-') || Group.IndexOf('-') != Group.LastIndexOf('-')  || Group.Contains(' ') || Regex.Match(Group, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Group, "[0-9]").Value.Length < 0 && IsAdding == false)
                         function.ExeptionDefaultOutput(3, $"В графе Группа {words[6]} на строке {CurrenLineNum + 1} допущена ошибка. ", "Посмотрите шаблон, название группы должно быть слитно с числами\nПример: БПИ20-9");
 
+                    // Курс
                     Approved = int.TryParse(words[7], out Course);
                     if (!Approved||Course<1 || Course>5 && IsAdding == false)
                         function.ExeptionDefaultOutput(3, $"В графе Курс {words[7]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
 
+                    // Средний балл из файла
                     Approved = double.TryParse(words[8], out avgscore);
                     if (!Approved || avgscore < 0 || avgscore > 5 && IsAdding == false)
                         function.ExeptionDefaultOutput(3, $"В графе Средний балл {words[8]} на строке {CurrenLineNum + 1} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");

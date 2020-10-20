@@ -13,7 +13,7 @@
         public int Cource { get; set; }                 // [Курс]
         public double AverageScore { get; set; }        // *,*
 
-        public Student(int _placeinlist, string _surname, string _name, string _middlename, string _birthdate, string _institute, string _group, int _cource, double _avgscore) //КоНсТрУкТоР
+        public Student(int _placeinlist, string _surname, string _name, string _middlename, string _birthdate, string _institute, string _group, int _cource, double _avgscore) //Конструктор
         {
             PlaceInList = _placeinlist;
             SurName = _surname;
