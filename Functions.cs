@@ -289,7 +289,7 @@ namespace lab2_DB
 
                 case 1:
                     Console.Clear();
-                    AddElement();
+                    AddMenu();
                     break;
 
                 case 2:
@@ -405,8 +405,49 @@ namespace lab2_DB
                     EditorMenu();
                     break;
             }
-        } //Меню сортировки
-        private void AddElement()
+        } //Меню сортировкиы
+        private void AddMenu()
+        {
+            int Coice = 0, key;
+            do
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("Меню редактора");
+                Console.ResetColor();
+                Console.WriteLine(((Coice == 0) ? ">> " : " ") + "Добавить одной линией");
+                Console.WriteLine(((Coice == 1) ? ">> " : " ") + "Добавить последовательно");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(((Coice == 2) ? ">> " : " ") + "Назад");
+                Console.ResetColor();
+                Console.ResetColor();
+
+                key = (int)Console.ReadKey().Key;
+                AutoMainMenu(key);
+                if (key == 38) Coice--;
+                if (key == 40) Coice++;
+
+                if (Coice < 0) Coice = 2;
+                if (Coice > 2) Coice = 0;
+
+            } while (key != 13);
+            switch (Coice)
+            {
+                case 0:
+                    AddElementSingleLine();
+                    break;
+                case 1:
+                    AddElementSteply();
+                    break;
+                case 2:
+                    EditorMenu();
+                    break;
+                default:
+                    Console.WriteLine("В смысле?");
+                    break;
+            }
+        } // Меню добавления
+        private void AddElementSteply()
         {
             ReadListFile(true);
             string SurName, Name, MiddleName, BDDate, Institute, Group;
@@ -602,7 +643,62 @@ namespace lab2_DB
                     EditorMenu();
                 }
             }
-        } //Меню создания нового студента
+        } //Меню создания нового студента постепенно
+        private void AddElementSingleLine()
+        {
+            Console.Clear();
+            try { 
+                ReadListFile(true);
+                string SurName, Name, MiddleName, BDDate, Institute, Group;
+                int Course;
+                double avgscore;
+                Console.Title = "Редактор добавления студента";
+                Console.WriteLine("Пример ввода: Серебряков Иван Олегович 01.02.03 ИТАСУ БПИ20-9 3 4.6");
+                string CurrentLine = Console.ReadLine();
+                string[] words = CurrentLine.Split(' ');
+                bool IsAdding = true, Approved = true;
+                
+                // Имя + Фамилия + Отчество из файла
+                SurName = words[0];
+                Name = words[1];
+                MiddleName = words[2];
+                if (Regex.Match(SurName + Name + MiddleName, "[a-zA-Z]").Value.Length > 0 && IsAdding == false)
+                    ExeptionDefaultOutput(3, $"В графе ФИО {SurName + " " + Name + " " + MiddleName} допущена ошибка. ", "\nУберите лишние буквы");
+
+                // Дата рождения из файла
+                BDDate = words[3];
+                if (Regex.Match(BDDate, "[а-яА-ЯёЁa-zA-Z]").Value.Length > 0 && IsAdding == false || BDDate.Remove(0, 6).Length != 2) // 01.01.01
+                    ExeptionDefaultOutput(3, $"В графе Дата {words[4]} допущена ошибка. ", "\nУберите лишние буквы и цифры");
+
+                // Институт из файла
+                Institute = words[4].ToUpper();
+                if (Regex.Match(Institute, "[a-zA-Z0-9]").Value.Length > 0 && IsAdding == false)
+                    ExeptionDefaultOutput(3, $"В графе Институт {words[5]} допущена ошибка. ", "\nУберите лишние буквы");
+
+                // Группа из файла
+                Group = words[5].ToUpper();
+                if (!Group.Contains('-') || Group.IndexOf('-') != Group.LastIndexOf('-') || Group.Contains(' ') || Regex.Match(Group, "[a-zA-Z]").Value.Length > 0 || Regex.Match(Group, "[0-9]").Value.Length < 0 && IsAdding == false)
+                    ExeptionDefaultOutput(3, $"В графе Группа {words[6]} допущена ошибка. ", "Посмотрите шаблон, название группы должно быть слитно с числами\nПример: БПИ20-9");
+
+                // Курс
+                Approved = int.TryParse(words[6], out Course);
+                if (!Approved || Course < 1 || Course > 5 && IsAdding == false)
+                    ExeptionDefaultOutput(3, $"В графе Курс {words[7]} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
+
+                // Средний балл из файла
+                words[7] = words[7].Replace('.',',');
+                Approved = double.TryParse(words[7], out avgscore);
+                if (!Approved || avgscore < 0 || avgscore > 5 && IsAdding == false)
+                    ExeptionDefaultOutput(3, $"В графе Средний балл {words[8]} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
+
+                TotalList.Add(new Student(TotalList.Count+1, SurName, Name, MiddleName, BDDate, Institute, Group, Course, avgscore));
+            }
+            catch
+            {
+                ExeptionDefaultOutput(3, "Необрабатываемый запрос", "Обратитесь к разработчику");
+                AddMenu();
+            }
+        } //В одну линию
         private void EditElement()
         {
             ReadListFile(false);

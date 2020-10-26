@@ -8,6 +8,11 @@ namespace lab2_DB
     class WorkWithFileRaw
     {
         Functions function = new Functions();
+
+        public void CheckInput()
+        {
+
+        }
         public void ReadFromFileRaw(List<Student> list, bool IsAdding)
         {
             list.Clear();
