@@ -15,9 +15,14 @@ namespace lab2_DB
             }
             catch
             {
-                File.WriteAllText(defaultpath, "1 Иванов Сергей Михайлович 01.07.03 ИТАСУ БПИ20-9 2 3,2\n" +
+                File.WriteAllText(defaultpath,
+                    "1 Иванов Сергей Михайлович 01.07.03 ИТАСУ БПИ20-9 2 3,2\n" +
                     "2 Алексей Истомин Иванович 02.08.01 ИТАСУ БПИ20-8 2 4,3\n" +
-                    "3 Сергеев Наруто Евгеньевич 02.02.01 ИТАСУ БПИ20-5 3 4,4");
+                    "3 Сергеев Наруто Евгеньевич 02.02.01 ИТАСУ БПИ20-5 3 4,4\n" +
+                    "4 Сергеев Наруто Евгеньевич 02.02.01 ИТАСУ БПИ20-5 3 4,4\n" +
+                    "5 Иванов Михаил Сергеевич 01.04.03 ИТАСУ БПИ20-9 2 4,2");
+
+
 
                 Console.Title = "ПРЕДУПРЕЖДЕНИЕ";
                 Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -31,7 +36,7 @@ namespace lab2_DB
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 Console.WriteLine("\n--------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить");
                 Console.ResetColor();
-                Console.ReadLine();
+                Console.ReadKey();
             }
             Functions Func = new Functions();
             Func.MainMenu();

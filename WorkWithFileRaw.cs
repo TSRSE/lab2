@@ -9,10 +9,6 @@ namespace lab2_DB
     {
         Functions function = new Functions();
 
-        public void CheckInput()
-        {
-
-        }
         public void ReadFromFileRaw(List<Student> list, bool IsAdding)
         {
             list.Clear();

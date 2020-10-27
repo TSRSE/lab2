@@ -41,7 +41,7 @@ namespace lab2_DB
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine(Solution);
                     Console.ResetColor();
-                    Console.WriteLine("\nНажмите любую клавишу, чтобы вернуться в меню");
+                    Console.WriteLine("\nНажмите любую клавишу, чтобы вернуться в меню или ESC, чтобы выйти в главное меню");
                     key = (int)Console.ReadKey().Key;
                     AutoMainMenu(key);
                     break;
@@ -340,22 +340,7 @@ namespace lab2_DB
                 case 0:
                     Editing = false;
                     ReadListFile(Editing);
-                    //q1 - Сортировка по ФИО Возрастающая
-                    IEnumerable<Student> q1 = TotalList.OrderBy(sortByName => sortByName.SurName).OrderBy(sortByName => sortByName.Name).OrderBy(sortByName => sortByName.MiddleName);
-                    Console.Clear();
-
-                    foreach (Student student in q1)
-                    {
-                        Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} \t| Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
-                    }
-                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
-                    SortElementsByOrderMenu();
-                    break;
-
-                case 1:
-                    Editing = false;
-                    ReadListFile(Editing);
-                    //Dq1 - Сортировка по ФИО Убывающая
+                    //Dq1 - Сортировка по ФИО Возрастающая
                     IEnumerable<Student> Dq1 = TotalList.OrderByDescending(DsortByName => DsortByName.SurName).OrderByDescending(DsortByName => DsortByName.Name).OrderByDescending(DsortByName => DsortByName.MiddleName);
                     Console.Clear();
 
@@ -364,7 +349,23 @@ namespace lab2_DB
                         Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} \t| Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
                     }
                     TotalList.Clear();
-                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить","");
+                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить", "");
+                    SortElementsByOrderMenu();
+                    break;
+
+                case 1:
+                    Editing = false;
+                    ReadListFile(Editing);
+                    //q1 - Сортировка по ФИО Убывающая
+                    
+                    IEnumerable<Student> q1 = TotalList.OrderBy(sortByName => sortByName.SurName).OrderBy(sortByName => sortByName.Name).OrderBy(sortByName => sortByName.MiddleName);
+                    Console.Clear();
+
+                    foreach (Student student in q1)
+                    {
+                        Console.WriteLine("№{0}| {1} {2} {3} \t| {4} | {5} {6} \t| Курс:{7} | Средний балл: {8}", student.PlaceInList, student.SurName, student.Name, student.MiddleName, student.BirthDayDate, student.Institute, student.Group, student.Cource, student.AverageScore);
+                    }
+                    ExeptionDefaultOutput(1, "------------------------------------------------------------------\nНажмите любую клавишу, чтобы продолжить", "");
                     SortElementsByOrderMenu();
                     break;
 
@@ -640,7 +641,7 @@ namespace lab2_DB
                 if (key == 27 || key == 78)
                 {
                     Console.Clear();
-                    EditorMenu();
+                    AddMenu();
                 }
             }
         } //Меню создания нового студента постепенно
@@ -692,6 +693,17 @@ namespace lab2_DB
                     ExeptionDefaultOutput(3, $"В графе Средний балл {words[8]} допущена ошибка. ", "\nУберите буквы и/или поставьте значение от 1 до 5");
 
                 TotalList.Add(new Student(TotalList.Count+1, SurName, Name, MiddleName, BDDate, Institute, Group, Course, avgscore));
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Студент успешно добавлен!");
+                Console.ResetColor();
+                WorkWithFileRaw Save = new WorkWithFileRaw();
+                Save.WriteInFileRaw(TotalList);
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("\nНажмите любую клавишу для продолжения");
+                Console.ResetColor();
+                Console.ReadKey();
+                AddMenu();
             }
             catch
             {
